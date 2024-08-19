@@ -1,9 +1,9 @@
 import 'package:chat_app/core/utils/constants/app_constants.dart';
 import 'package:chat_app/core/utils/extensions.dart';
-import 'package:chat_app/moduls/chat/presentation/screens/chat_screen.dart';
 import 'package:chat_app/moduls/home/presentation/widgets/picture_item.dart';
 import 'package:flutter/material.dart';
 
+import '../../../chat/presentation/screens/chat_screen.dart';
 import '../widgets/story_item.dart';
 
 class HomePageScreen extends StatelessWidget {
@@ -24,7 +24,7 @@ class HomePageScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppConstants.appPadding),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
