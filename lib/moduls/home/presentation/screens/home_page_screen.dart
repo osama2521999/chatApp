@@ -1,6 +1,6 @@
 import 'package:chat_app/core/utils/constants/app_constants.dart';
 import 'package:chat_app/core/utils/extensions.dart';
-import 'package:chat_app/moduls/home/presentation/screens/chat_screen.dart';
+import 'package:chat_app/moduls/chat/presentation/screens/chat_screen.dart';
 import 'package:chat_app/moduls/home/presentation/widgets/picture_item.dart';
 import 'package:flutter/material.dart';
 
