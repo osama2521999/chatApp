@@ -13,10 +13,15 @@ class HomePageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.mainColor,
+
       drawer: Drawer(
+
         backgroundColor: Colors.grey,
       ),
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white
+        ),
         backgroundColor: AppConstants.mainColor,
         title: Text(
           'Chats',

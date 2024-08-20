@@ -1,23 +1,21 @@
 import 'package:chat_app/core/utils/constants/app_constants.dart';
 import 'package:chat_app/core/utils/extensions.dart';
+import 'package:chat_app/moduls/login/presentation/controllers/login_controller.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+   LoginScreen({super.key});
 
+
+  final TextEditingController emailController=TextEditingController();
+  final TextEditingController passController=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor: AppConstants.mainColor,
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: Colors.purpleAccent,),
-          onPressed:(){
-            Navigator.pop(context);
-          },
-        ),
+        backgroundColor: AppConstants.mainColor,
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -29,11 +27,12 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(height:  context.height()/30,),
 
                 TextFormField(
+                  controller: emailController  ,
                   style: TextStyle(
                       color: Colors.white
                   ),
                   decoration: InputDecoration(
-                      hintText: 'phone or email',
+                      hintText: 'Email',
                       hintStyle: TextStyle(color: Colors.grey),
 
                       border: OutlineInputBorder(
@@ -42,6 +41,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(height:  context.height()/50,),
                 TextFormField(
+                  controller:passController ,
                   style: TextStyle(
                       color: Colors.white
                   ),
@@ -61,7 +61,9 @@ class LoginScreen extends StatelessWidget {
                       color: Color(0Xff303030),
                       borderRadius: BorderRadius.circular(AppConstants.buttonsBorderRadius)
                     ),
-                    child: TextButton(onPressed: (){}, child: Text('Log in',style:  TextStyle(color: Colors.white),))),
+                    child: TextButton(onPressed: (){
+
+                    }, child: Text('Log in',style:  TextStyle(color: Colors.white),))),
                 SizedBox(height:  context.height()/50,),
                 Container(
                     width: context.width(),
@@ -70,7 +72,10 @@ class LoginScreen extends StatelessWidget {
                       color: Color(0Xff303030),
                       borderRadius: BorderRadius.circular(AppConstants.buttonsBorderRadius)
                     ),
-                    child: TextButton(onPressed: (){}, child: Text('Creat New Account ',style:  TextStyle(color: Colors.white),))),
+                    child: TextButton(onPressed: (){
+                      LoginController().signUp(emailController.text, passController.text);
+
+                    }, child: Text('Creat New Account ',style:  TextStyle(color: Colors.white),))),
                 SizedBox(height:  context.height()/30,),
                 TextButton(onPressed: (){}, child: Text('Forget Password?',style: TextStyle(color: Colors.blue),),)
               ],
