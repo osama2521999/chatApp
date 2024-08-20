@@ -61,7 +61,9 @@ class LoginScreen extends StatelessWidget {
                       color: Color(0Xff303030),
                       borderRadius: BorderRadius.circular(AppConstants.buttonsBorderRadius)
                     ),
-                    child: TextButton(onPressed: (){
+                    child: TextButton(onPressed: ()async{
+
+                      await LoginController().signInEmail(emailController.text, passController.text);
 
                     }, child: Text('Log in',style:  TextStyle(color: Colors.white),))),
                 SizedBox(height:  context.height()/50,),
@@ -72,8 +74,9 @@ class LoginScreen extends StatelessWidget {
                       color: Color(0Xff303030),
                       borderRadius: BorderRadius.circular(AppConstants.buttonsBorderRadius)
                     ),
-                    child: TextButton(onPressed: (){
-                      LoginController().signUp(emailController.text, passController.text);
+                    child: TextButton(onPressed: ()async{
+
+                     await LoginController().signUp(emailController.text, passController.text) ? print('userCreated'):print('failed');
 
                     }, child: Text('Creat New Account ',style:  TextStyle(color: Colors.white),))),
                 SizedBox(height:  context.height()/30,),

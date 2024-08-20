@@ -4,18 +4,24 @@ class LoginController{
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<User> signInEmail(String email, String password) async {
+  Future<User?> signInEmail(String email, String password) async {
     UserCredential result =
     await auth.signInWithEmailAndPassword(email: email, password: password);
-    final User user = result.user!;
-
+    final User? user = result.user;
+    user!=null? print('user signed in'):print('failed signing');
+    print(user?.email);
     return user;
+
   }
-  Future<User> signUp(email, password) async {
+  Future<bool> signUp(email, password) async {
     UserCredential result = await auth.createUserWithEmailAndPassword(
         email: email, password: password);
-    final User user = result.user!;
 
-    return user;
+
+    final User? user = result.user;
+
+
+
+    return user != null ? true : false;
   }
 }
