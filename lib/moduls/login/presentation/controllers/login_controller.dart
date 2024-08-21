@@ -1,29 +1,38 @@
+import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginController {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<User?> signInEmail(String email, String password) async {
+  Future<Either<String,User?>> signInEmail(String email, String password) async {
     User? user;
     try {
       UserCredential result = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       user = result.user;
-      user != null ? print('user signed in') : print('failed signing');
-      print(user?.email);
-      return user;
+
+      return Right(user);
     } on Exception catch (e) {
-      print("osama${e}");
-      return user;
+      return Left(e.toString());
     }
   }
 
-  Future<bool> signUp(email, password) async {
-    UserCredential result = await auth.createUserWithEmailAndPassword(
-        email: email, password: password);
+  Future<Either<String,bool>> signUp(email, password,String displayName) async {
 
-    final User? user = result.user;
+   try{
+     UserCredential result = await auth.createUserWithEmailAndPassword(
+         email: email, password: password);
 
-    return user != null ? true : false;
+     final User? user = result.user;
+     if(user !=null){
+       user.updateDisplayName(displayName);
+     }
+       return Right((user != null ? true : false));
+
+   }on Exception catch(e){
+     return Left(e.toString());
+   }
+
+
   }
 }

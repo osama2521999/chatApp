@@ -7,8 +7,9 @@ import '../../../chat/presentation/screens/chat_screen.dart';
 import '../widgets/story_item.dart';
 
 class HomePageScreen extends StatelessWidget {
-  const HomePageScreen({super.key});
+  const HomePageScreen(this.name,{super.key});
 
+  final String? name;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +25,7 @@ class HomePageScreen extends StatelessWidget {
         ),
         backgroundColor: AppConstants.mainColor,
         title: Text(
-          'Chats',
+          'Hi,${name?.toUpperCase()}',
           style: TextStyle(color: Colors.white),
         ),
       ),
