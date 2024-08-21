@@ -3,11 +3,16 @@ import 'package:chat_app/core/utils/extensions.dart';
 import 'package:chat_app/moduls/home/presentation/screens/home_page_screen.dart';
 import 'package:chat_app/moduls/login/presentation/controllers/login_controller.dart';
 import 'package:chat_app/moduls/login/presentation/screens/create_user_screen.dart';
+import 'package:chat_app/moduls/login/presentation/screens/forget_pass.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../../../core/utils/common/custom_button.dart';
+import '../../../../core/utils/common/custom_field.dart';
+import '../../../../core/utils/common/spaces.dart';
+
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -29,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
         .signInEmail(emailController.text, passController.text);
     result.fold((l) {
       Fluttertoast.showToast(
-          msg: "$l",
+          msg: l,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -38,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
           fontSize: 16.0);
     }, (r) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return HomePageScreen( r?.displayName);
+        return HomePageScreen(r?.displayName);
       }));
     });
     setState(() {
@@ -57,67 +62,54 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsetsDirectional.symmetric(
+            padding: const EdgeInsetsDirectional.symmetric(
                 horizontal: AppConstants.appPadding),
             child: Column(
               children: [
-                Text('Login with your email',
+                const Text('Login with your email',
                     style: TextStyle(fontSize: 24, color: Colors.white)),
-                SizedBox(
-                  height: context.height() / 30,
-                ),
+                const GapH(height: 30),
                 CustomTextFormField(
                   controller: emailController,
-                      hintText: 'Email',
-                      ),
-                SizedBox(
-                  height: context.height() / 50,
+                  hintText: 'Email',
                 ),
-                CustomTextFormField(controller: passController,hintText: 'Password',),
-                SizedBox(
-                  height: context.height() / 30,
+                const GapH(height: 50),
+                CustomTextFormField(
+                  controller: passController,
+                  hintText: 'Password',
                 ),
+                const GapH(height: 30),
                 checkLogin
-                    ? CircularProgressIndicator()
-                    : Container(
+                    ? const CircularProgressIndicator()
+                    : CustomButton(
                         width: context.width(),
                         height: context.height() / 12,
-                        decoration: BoxDecoration(
-                            color: Color(0Xff303030),
-                            borderRadius: BorderRadius.circular(
-                                AppConstants.buttonsBorderRadius)),
-                        child: TextButton(
-                            onPressed: () {
-                              login();
-                            },
-                            child: Text(
-                              'Log in',
-                              style: TextStyle(color: Colors.white),
-                            ))),
-                SizedBox(
-                  height: context.height() / 50,
-                ),
-                Container(
-                    width: context.width(),
-                    height: context.height() / 12,
-                    decoration: BoxDecoration(
-                        color: Color(0Xff303030),
-                        borderRadius: BorderRadius.circular(
-                            AppConstants.buttonsBorderRadius)),
-                    child: TextButton(
-                        onPressed: ()  {
-                          Navigator.push(context, MaterialPageRoute(builder: (context){return CreateUserScreen();}));
+                        text: 'Log in',
+                        onPressed: () {
+                          login();
                         },
-                        child: Text(
-                          'Creat New Account ',
-                          style: TextStyle(color: Colors.white),
-                        ))),
-                SizedBox(
-                  height: context.height() / 30,
+                      ),
+                const GapH(height: 30),
+                CustomButton(
+                  width: context.width(),
+                  height: context.height() / 12,
+                  text: 'Creat New Account ',
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const CreateUserScreen();
+                    }));
+                  },
                 ),
+                const GapH(height: 30),
                 TextButton(
-                  onPressed: () {},
-                  child: Text(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                          return const ForgetPassScreen();
+                        }));
+                  },
+                  child: const Text(
                     'Forget Password?',
                     style: TextStyle(color: Colors.blue),
                   ),
@@ -127,42 +119,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class CustomTextFormField extends StatelessWidget {
-   CustomTextFormField({
-    super.key,
-    required this.controller, this.color, this.textColor, this.hintColor, this.hintText,
-    this.validator,this.onFieldSubmitted,this.keyboardType,this.obscureText
-  });
-
-  final TextEditingController controller;
-  final Color? color;
-  final Color? textColor;
-  final Color? hintColor;
-  final String? hintText;
-  String? Function(String?)? validator;
-  void Function(String?)? onFieldSubmitted;
-  bool? obscureText ;
-  TextInputType? keyboardType ;
-  @override
-  Widget build(BuildContext context) {
-
-    return TextFormField(
-      validator: validator ,
-      onFieldSubmitted: onFieldSubmitted,
-      obscureText: obscureText??false ,
-      keyboardType: keyboardType   ,
-      controller: controller,
-      style: TextStyle(color: textColor??Colors.white),
-      decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: TextStyle(color:hintColor?? Colors.grey),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          )),
     );
   }
 }

@@ -8,28 +8,23 @@ import '../../../../core/utils/common/custom_field.dart';
 import '../../../../core/utils/constants/app_constants.dart';
 import '../controllers/login_controller.dart';
 
-class CreateUserScreen extends StatefulWidget {
-  const CreateUserScreen({super.key});
+class ForgetPassScreen extends StatefulWidget {
+  const ForgetPassScreen({super.key});
 
   @override
-  State<CreateUserScreen> createState() => _CreateUserScreenState();
+  State<ForgetPassScreen> createState() => _ForgetPassScreenState();
 }
 
-class _CreateUserScreenState extends State<CreateUserScreen> {
+class _ForgetPassScreenState extends State<ForgetPassScreen> {
   TextEditingController emailController = TextEditingController();
-
-  TextEditingController passwordController = TextEditingController();
-
-  TextEditingController displayedNameController = TextEditingController();
-
   bool isLoadingState = false;
 
-  Future<void> create(BuildContext context) async {
+
+  Future<void> forgetPass(BuildContext context) async {
     setState(() {
       isLoadingState = true;
     });
-    var result = await LoginController().signUp(emailController.text,
-        passwordController.text, displayedNameController.text);
+    var result = await LoginController().forgotPassword(emailController.text);
     result.fold((l) {
       Fluttertoast.showToast(
           msg: "$l",
@@ -43,7 +38,17 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
         isLoadingState = false;
       });
     }, (r) {
-      Navigator.pop(context);
+      Fluttertoast.showToast(
+          msg: r,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      setState(() {
+        isLoadingState = false;
+      });
     });
   }
 
@@ -53,44 +58,33 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
       appBar: AppBar(
         backgroundColor: AppConstants.mainColor,
         title: const Text(
-          'Create New User',
+          'Forget Password',
           style: TextStyle(color: Colors.white),
         ),
       ),
       backgroundColor: AppConstants.mainColor,
       body: Padding(
         padding:
-            const EdgeInsets.symmetric(horizontal: AppConstants.appPadding),
+        const EdgeInsets.symmetric(horizontal: AppConstants.appPadding),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: [
                 CustomTextFormField(
-                  controller: displayedNameController,
-                  hintText: "Your Name",
-                ),
-                const GapH(height: 50),
-                CustomTextFormField(
                   controller: emailController,
                   hintText: 'email',
-                ),
-                const GapH(height: 50),
-                CustomTextFormField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  obscureText: true,
                 ),
                 const GapH(height: 30),
                 isLoadingState
                     ? const CircularProgressIndicator()
                     : CustomButton(
-                        width: context.width(),
-                        height: context.height() / 12,
-                        text: "Create ",
-                        onPressed: () async {
-                          await create(context);
-                        },
-                      ),
+                  width: context.width(),
+                  height: context.height() / 12,
+                  text: "forget",
+                  onPressed: () async {
+                    await forgetPass(context);
+                  },
+                ),
               ],
             ),
           ),
