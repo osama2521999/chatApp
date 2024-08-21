@@ -28,8 +28,12 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
     setState(() {
       isLoadingState = true;
     });
-    var result = await LoginController().signUp(emailController.text,
-        passwordController.text, displayedNameController.text);
+    String email=emailController.text;
+    String password=passwordController.text;
+    String name=displayedNameController.text;
+
+    var result = await LoginController().signUp( email,
+        password, name);
     result.fold((l) {
       Fluttertoast.showToast(
           msg: "$l",

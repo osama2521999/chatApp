@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class LoginController {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -23,14 +24,24 @@ class LoginController {
 
   Future<Either<String, bool>> signUp(
       email, password, String displayName) async {
+
     try {
-      UserCredential result = await auth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      final User? user = result.user;
+      final User? user = userCredential.user;
       if (user != null) {
         user.updateDisplayName(displayName);
         user.sendEmailVerification();
+
+        ///add user to real time database
+        DatabaseReference ref = FirebaseDatabase.instance.ref("Users/${user.uid}");
+        await ref.set({
+          "email": user.email,
+          "name": displayName,
+          "isActive": true,
+          
+        }).then((_){print('user created');});
       }
       return Right((user != null ? true : false));
     } on Exception catch (e) {
