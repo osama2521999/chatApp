@@ -29,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       checkLogin = true;
     });
-
     var result = await LoginController()
         .signInEmail(emailController.text, passController.text);
     result.fold((l) {
@@ -41,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Colors.grey,
           textColor: Colors.white,
           fontSize: 16.0);
-    }, (r) {
+    }, (r)async {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return HomePageScreen(r?.displayName);
       }));
@@ -50,6 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
       checkLogin = false;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

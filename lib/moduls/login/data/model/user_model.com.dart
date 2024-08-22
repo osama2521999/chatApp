@@ -1,15 +1,17 @@
 class UserModel{
 
- String uId;
+ // String uId;
  String name;
  String email;
+ bool isActive;
 
- UserModel({required this.uId,required this.name,required this.email});
 
- factory UserModel.fromJson( Map<String,dynamic> json){
+ UserModel({required this.isActive,required this.name,required this.email});
+
+ factory UserModel.fromJson(  json){
   return UserModel(
-      uId: json['uid'],
-      name: json['displayname'],
+      isActive: json['isActive'],
+      name: json['name'],
       email: json['email']);
   }
 }
