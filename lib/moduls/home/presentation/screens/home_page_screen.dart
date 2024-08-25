@@ -18,47 +18,56 @@ class HomePageScreen extends StatefulWidget {
   State<HomePageScreen> createState() => _HomePageScreenState();
 }
 
-class _HomePageScreenState extends State<HomePageScreen> {
+class _HomePageScreenState extends State<HomePageScreen> with WidgetsBindingObserver{
    final LoginController loginController= LoginController();
    DatabaseReference userRef =   FirebaseDatabase.instance.ref('Users');
 
 
    @override
-  void initState() {
-    // TODO: implement initState
-     print("im here initState");
-    super.initState();
-  }
+   void initState(){
+     WidgetsBinding.instance.addObserver(this);
+     super.initState();
+   }
 
-  @override
-  void dispose() async {
-    // TODO: implement dispose
-    // debugger();
-    print("im here dispose");
-    await loginController.closingApp();
-    super.dispose();
-  }
 
-  // @override
-  // void deactivate() async{
-  //   // TODO: implement deactivate
-  //   // debugger();
-  //   print("im here deactivate");
-  //   await loginController.closingApp();
-  //   super.deactivate();
-  // }
+   @override
+   void dispose() {
+     WidgetsBinding.instance.removeObserver(this);
+     super.dispose();
+   }
+
+   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+     switch (state) {
+       case AppLifecycleState.resumed:
+         print("app in resumed");
+         break;
+       case AppLifecycleState.inactive:
+         print("app in inactive");
+         loginController.closingApp();
+         break;
+       case AppLifecycleState.paused:
+         print("app in paused");
+         loginController.closingApp();
+         break;
+       case AppLifecycleState.detached:
+         print("app in detached");
+         break;
+       case AppLifecycleState.hidden:
+       // TODO: Handle this case.
+     }
+   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.mainColor,
 
-      drawer: Drawer(
-
+      drawer: const Drawer(
         backgroundColor: Colors.grey,
       ),
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.white
         ),
         backgroundColor: AppConstants.mainColor,
