@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomButton(
                   width: context.width(),
                   height: context.height() / 12,
-                  text: 'Creat New Account ',
+                  text: 'Create New Account ',
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {

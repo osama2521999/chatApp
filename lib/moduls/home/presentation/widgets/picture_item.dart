@@ -7,6 +7,7 @@ class PictureItem extends StatelessWidget {
     this.activeStatusRadius = 7,
     this.rightPosition = 5,
     this.bottomPosition = 10,
+     this.isActive=false,
     super.key,
   });
 
@@ -14,6 +15,7 @@ class PictureItem extends StatelessWidget {
   final double activeStatusRadius;
   final double rightPosition;
   final double bottomPosition;
+  final bool  isActive;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class PictureItem extends StatelessWidget {
             right: rightPosition,
             bottom: bottomPosition,
             child: CircleAvatar(
-                radius: activeStatusRadius, backgroundColor: Colors.green)),
+                radius: activeStatusRadius, backgroundColor: isActive? Colors.green:Colors.grey)),
       ],
     );
   }
@@ -39,5 +41,6 @@ class SmallPictureItem extends PictureItem {
             radius: AppConstants.smallPictureRadius,
             rightPosition: 2,
             bottomPosition: 2,
-            activeStatusRadius: 6);
+            activeStatusRadius: 6,
+  isActive: false);
 }

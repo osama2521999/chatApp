@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_app/core/utils/constants/app_constants.dart';
 import 'package:chat_app/core/utils/extensions.dart';
 import 'package:chat_app/moduls/home/presentation/widgets/picture_item.dart';
@@ -21,6 +23,30 @@ class _HomePageScreenState extends State<HomePageScreen> {
    DatabaseReference userRef =   FirebaseDatabase.instance.ref('Users');
 
 
+   @override
+  void initState() {
+    // TODO: implement initState
+     print("im here initState");
+    super.initState();
+  }
+
+  @override
+  void dispose() async {
+    // TODO: implement dispose
+    // debugger();
+    print("im here dispose");
+    await loginController.closingApp();
+    super.dispose();
+  }
+
+  // @override
+  // void deactivate() async{
+  //   // TODO: implement deactivate
+  //   // debugger();
+  //   print("im here deactivate");
+  //   await loginController.closingApp();
+  //   super.deactivate();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +115,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 } else {
                  // List<DataSnapshot> users=   snap.data?.snapshot.children as List<DataSnapshot> ;
                     return ListView.builder(
+                      // itemCount: 1,
                     itemCount: snap.data?.snapshot.children.length??0,
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -98,12 +125,12 @@ class _HomePageScreenState extends State<HomePageScreen> {
                         child: GestureDetector(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context){
-                              return ChatScreen();
+                              return ChatScreen(loginController.usersList[index]);
                             }));
                           },
                           child: Row(
                             children: [
-                              PictureItem(),
+                              PictureItem( isActive: loginController.usersList[index].isActive,),
                               SizedBox(width: context.width()/30,),
                               Expanded(
                                 child: Column(
