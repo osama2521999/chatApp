@@ -11,21 +11,24 @@ import '../../../chat/presentation/screens/chat_screen.dart';
 import '../widgets/story_item.dart';
 
 class HomePageScreen extends StatefulWidget {
-   HomePageScreen(this.name,{super.key});
-  final String? name;
+   const HomePageScreen({super.key,required this.loginController});
+   final LoginController loginController;
 
   @override
   State<HomePageScreen> createState() => _HomePageScreenState();
 }
 
 class _HomePageScreenState extends State<HomePageScreen> with WidgetsBindingObserver{
-   final LoginController loginController= LoginController();
+
+    LoginController loginController= LoginController();
    DatabaseReference userRef =   FirebaseDatabase.instance.ref('Users');
 
 
    @override
    void initState(){
      WidgetsBinding.instance.addObserver(this);
+      loginController= widget.loginController;
+     print("user = ${loginController.user}");
      super.initState();
    }
 
@@ -41,6 +44,7 @@ class _HomePageScreenState extends State<HomePageScreen> with WidgetsBindingObse
      switch (state) {
        case AppLifecycleState.resumed:
          print("app in resumed");
+         loginController.resumeApp();
          break;
        case AppLifecycleState.inactive:
          print("app in inactive");
@@ -48,7 +52,6 @@ class _HomePageScreenState extends State<HomePageScreen> with WidgetsBindingObse
          break;
        case AppLifecycleState.paused:
          print("app in paused");
-         loginController.closingApp();
          break;
        case AppLifecycleState.detached:
          print("app in detached");
@@ -72,7 +75,7 @@ class _HomePageScreenState extends State<HomePageScreen> with WidgetsBindingObse
         ),
         backgroundColor: AppConstants.mainColor,
         title: Text(
-          'Hi,${widget.name?.toUpperCase()}',
+          'Hi,${loginController.user?.displayName?.toUpperCase()}',
           style: TextStyle(color: Colors.white),
         ),
       ),

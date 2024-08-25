@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_app/moduls/login/data/model/user_model.com.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -116,6 +118,16 @@ class LoginController {
         "isActive": false,
       });
       print('updated');
+    }
+  }
+
+  resumeApp()async {
+    if (user != null) {
+      DatabaseReference ref =
+      FirebaseDatabase.instance.ref("Users/${user!.uid}");
+      await ref.update({
+        "isActive": true,
+      });
     }
   }
 

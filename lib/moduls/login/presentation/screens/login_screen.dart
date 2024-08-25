@@ -29,8 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       checkLogin = true;
     });
-    var result = await LoginController()
-        .signInEmail(emailController.text, passController.text);
+    var controller = LoginController();
+    var result = await controller.signInEmail(emailController.text, passController.text);
     result.fold((l) {
       Fluttertoast.showToast(
           msg: l,
@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
           fontSize: 16.0);
     }, (r)async {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return HomePageScreen(r?.displayName);
+        return HomePageScreen(loginController: controller);
       }));
     });
     setState(() {
