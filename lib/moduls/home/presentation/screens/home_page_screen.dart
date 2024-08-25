@@ -23,7 +23,6 @@ class _HomePageScreenState extends State<HomePageScreen> with WidgetsBindingObse
     LoginController loginController= LoginController();
    DatabaseReference userRef =   FirebaseDatabase.instance.ref('Users');
 
-
    @override
    void initState(){
      WidgetsBinding.instance.addObserver(this);
@@ -109,7 +108,7 @@ class _HomePageScreenState extends State<HomePageScreen> with WidgetsBindingObse
                   // shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                       child: StoryItem(),
                     );
@@ -118,18 +117,18 @@ class _HomePageScreenState extends State<HomePageScreen> with WidgetsBindingObse
                 ),
               ),
               StreamBuilder(
-                stream: userRef.onValue ,
+                stream: userRef.onValue,
                 builder: (context,snap) {
-                  loginController.getUsersList();
+                  loginController.getUsersList(snap.data?.snapshot.children);
 
                   if(!snap.hasData){
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else {
                  // List<DataSnapshot> users=   snap.data?.snapshot.children as List<DataSnapshot> ;
                     return ListView.builder(
                       // itemCount: 1,
-                    itemCount: snap.data?.snapshot.children.length??0,
-                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: loginController.usersList.length,
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return Padding(

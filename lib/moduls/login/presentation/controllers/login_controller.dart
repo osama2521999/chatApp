@@ -7,28 +7,25 @@ import 'package:firebase_database/firebase_database.dart';
 
 class LoginController {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<UserModel> usersList=[];
+  List<UserModel> usersList = [];
   User? user;
   UserCredential? result;
+
   Future<Either<String, User?>> signInEmail(
       String email, String password) async {
-
     // User? user;
     try {
-       result = await auth.signInWithEmailAndPassword(
+      result = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       user = result?.user;
-      if(user!=null) {
+      if (user != null) {
         DatabaseReference ref =
             FirebaseDatabase.instance.ref("Users/${user!.uid}");
         await ref.update({
           "isActive": true,
-        }).then((v){
+        }).then((v) {
           print('ISAvtive=${true}');
         });
-
-
-
       }
       if (user != null && !user!.emailVerified) {
         return const Left("Please Verify your email first");
@@ -42,7 +39,6 @@ class LoginController {
 
   Future<Either<String, bool>> signUp(
       email, password, String displayName) async {
-
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -53,13 +49,15 @@ class LoginController {
         user.sendEmailVerification();
 
         ///add user to real time database
-        DatabaseReference ref = FirebaseDatabase.instance.ref("Users/${user.uid}");
+        DatabaseReference ref =
+            FirebaseDatabase.instance.ref("Users/${user.uid}");
         await ref.set({
           "email": user.email,
           "name": displayName,
           "isActive": false,
-          
-        }).then((_){print('user created');});
+        }).then((_) {
+          print('user created');
+        });
       }
       return Right((user != null ? true : false));
     } on Exception catch (e) {
@@ -78,42 +76,26 @@ class LoginController {
     }
   }
 
-
-  List getUsersList()  {
-
-    DatabaseReference userRef =   FirebaseDatabase.instance.ref('Users');
-    userRef.onValue.listen((DatabaseEvent event) {
-      final data =   event.snapshot.children;
-      usersList=[];
-      for (var e in data ){
-        usersList.add(UserModel.fromJson(e.value)) ;
+  List getUsersList(Iterable<DataSnapshot>? data) {
+    usersList = [];
+    if(data != null){
+      for (var e in data) {
+        if(e.key != user?.uid){
+          usersList.add(UserModel.fromJson(e.value));
+        }
       }
-    });
-    return usersList;
+    }
 
-    // try {
-    //  DatabaseReference userRef =   FirebaseDatabase.instance.ref('Users');
-    //       userRef.onValue.listen((DatabaseEvent event) {
-    //         final data = event.snapshot.children;
-    //         for (var e in data ){
-    //          usersList.add(UserModel.fromJson(e.value)) ;
-    //         }
-    //       });
-    //   return  Right(usersList);
-    // } on FirebaseAuthException catch (err) {
-    //   return Left(err.message.toString());
-    // } catch (err) {
-    //   return Left(err.toString());
-    // }
+    return usersList;
   }
 
-  closingApp()async {
-    user=result?.user;
-    print( 'user is ${user}');
-    print( 'result is ${result}');
+  closingApp() async {
+    user = result?.user;
+    print('user is ${user}');
+    print('result is ${result}');
     if (user != null) {
       DatabaseReference ref =
-      FirebaseDatabase.instance.ref("Users/${user!.uid}");
+          FirebaseDatabase.instance.ref("Users/${user!.uid}");
       await ref.update({
         "isActive": false,
       });
@@ -121,14 +103,13 @@ class LoginController {
     }
   }
 
-  resumeApp()async {
+  resumeApp() async {
     if (user != null) {
       DatabaseReference ref =
-      FirebaseDatabase.instance.ref("Users/${user!.uid}");
+          FirebaseDatabase.instance.ref("Users/${user!.uid}");
       await ref.update({
         "isActive": true,
       });
     }
   }
-
 }
